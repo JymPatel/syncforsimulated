@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Quicksand:wght@300;400;500;600;700&family=Rubik+Dirt&display=swap');
+
+h1 {
+    color: #000000;
+    font-family: 'Cedarville Cursive', cursive;
+    font-size: 40px;
+    font-weight: 400;
+    margin: 2%;
+    padding-top: 0%;
+    margin-top: 0%;
+}
+
+h1:hover {
+    color: #53ee7a;
+}
