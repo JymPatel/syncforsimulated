@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Quicksand:wght@300;400;500;600;700&family=Rubik+Dirt&display=swap');
+
+h1 {
+    color: #000000;
+}
+
+.main-heading {
+    font-family: 'Cedarville Cursive', cursive;
+    font-size: 40px;
+    font-weight: 400;
+    margin: 2%;
+    padding-top: 0%;
+    margin-top: 0%;
+}
+
+
+button {
+    color: #53ee7a;
+}
+
+.login-main {
+    float: right;
+    background-color: #53ee7a;
+    color: #000000;
+    margin: 0.1%;
+    font-size: medium;
+    font-family: 'Cedarville Cursive', cursive;
+    font-weight: 800;
+    border-color: #53ee7a;
+    border-radius: 8%;
+
+}
+
+.login-main:hover {
+    float: right;
+    background-color: #000000;
+    color: #53ee7a;
+    border-color: #000000;
+}
