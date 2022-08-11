@@ -2,6 +2,9 @@
 
 h1 {
     color: #000000;
+}
+
+.main-heading {
     font-family: 'Cedarville Cursive', cursive;
     font-size: 40px;
     font-weight: 400;
@@ -10,6 +13,27 @@ h1 {
     margin-top: 0%;
 }
 
-h1:hover {
+
+button {
     color: #53ee7a;
+}
+
+.login-main {
+    float: right;
+    background-color: #53ee7a;
+    color: #000000;
+    margin: 0.1%;
+    font-size: medium;
+    font-family: 'Cedarville Cursive', cursive;
+    font-weight: 800;
+    border-color: #53ee7a;
+    border-radius: 8%;
+
+}
+
+.login-main:hover {
+    float: right;
+    background-color: #000000;
+    color: #53ee7a;
+    border-color: #000000;
 }
