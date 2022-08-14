@@ -1,3 +1,4 @@
+import sys
 import csv
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -7,12 +8,12 @@ from pprint import pprint
 print('authenticating ...')
 scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name("s4s-datasyncer.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name(sys.argv[1], scope)
 client = gspread.authorize(creds)
 
 # open sheet
 print('opening google sheet ...')
-sheet = client.open_by_key(input("KEY : "))
+sheet = client.open_by_url(sys.argv[2])
 try:
     worksheet = sheet.worksheet('synced_data')
 except gspread.exceptions.WorksheetNotFound:
@@ -20,7 +21,7 @@ except gspread.exceptions.WorksheetNotFound:
 
 # get data
 print('adding data')
-csv_file = input('PATH TO CSV : ')
+csv_file = sys.argv[3]
 with open(csv_file, 'r') as file:
     list = csv.reader(file)
     for row in list:
