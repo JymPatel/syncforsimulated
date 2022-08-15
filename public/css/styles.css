@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Quicksand:wght@300;400;500;600;700&family=Rubik+Dirt&display=swap');
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
 
 h1 {
     color: #000000;
@@ -20,20 +21,20 @@ button {
 
 .login-main {
     float: right;
-    background-color: #53ee7a;
-    color: #000000;
+    background-color: #EADDFF;
+    color: #21005D;
     margin: 0.1%;
     font-size: medium;
-    font-family: 'Cedarville Cursive', cursive;
-    font-weight: 800;
-    border-color: #53ee7a;
+    font-family: 'Roboto', 'Cedarville Cursive', cursive;
+    font-weight: 400;
+    border-color: #EADDFF;
     border-radius: 8%;
 
 }
 
 .login-main:hover {
     float: right;
-    background-color: #000000;
-    color: #53ee7a;
-    border-color: #000000;
+    background-color: #21005D;
+    color: #EADDFF;
+    border-color: #21005D;
 }
