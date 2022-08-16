@@ -67,3 +67,6 @@ node_modules/
 
 # local-folder
 unshared/*
+
+# python cache files
+code/__pycache__/*
