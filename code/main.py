@@ -67,11 +67,9 @@ def update_data(input_file, sheet_id, sheet_sync_json):
 # tmp variables
 usedfiles = []
 
-drive_sync_json = '../local_secrets/drive-sync.json' 
-sheet_sync_json = '../local_secrets/s4s.json'
 # variables
-# drive_sync_json = sys.argv[1]
-# sheet_sync_json = sys.argv[2]
+drive_sync_json = sys.argv[1]
+sheet_sync_json = sys.argv[2]
 data_folder = '1r8_0_JwiBZ7V_pCSSr08nhrPLHzFl-Ir'
 
 # get every folder we have
