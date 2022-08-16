@@ -32,4 +32,4 @@ jobs:
       
       - name: run main program
         run: |
-          python3 main.py creds.json https://docs.google.com/spreadsheets/d/1I7jFVbx174LrvrW-_iGb9dQAG-k7yGvPJ4UIscL_MCE/edit#gid=135674457 1.csv
+          python3 code/main.py creds.json creds.json 
