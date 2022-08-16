@@ -21,7 +21,8 @@ jobs:
         
       - name: install pip and pip-libraries
         run: |
-          pip install gspread oauth2client
+          pip install gspread oauth2client csv json sys datetime time 
+          pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib google-auth
 
       - name: create JSON file
         id: create-json
