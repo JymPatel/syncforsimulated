@@ -67,3 +67,4 @@ node_modules/
 s4s.json
 s4s-datasyncer.json
 local_secrets/s4s-local-drive.json
+local_secrets/s4s.json
