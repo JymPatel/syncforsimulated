@@ -34,11 +34,12 @@ body {
 .github_link {
     font-family: "Satisfy", 'Roboto Mono';
     text-decoration: none;
-    color: #3C5248;
+    color: #2C664C;
     font-size: 180%;
+    text-decoration: underline;
 }
 .github_link:hover {
-    color: #449E76;
+    color: #63E6AC;
 }
 
 h4 {
