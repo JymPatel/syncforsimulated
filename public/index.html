@@ -6,14 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>syncforsimulated</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script src="scripts/scripts.js"></script>
+    <script src="scripts/index.js"></script>
 </head>
 <body>
-    <p style="color: red; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">site under maintainance!!</p>
     <h1 class="main-heading">sync for simulated</h1>
-    <h3>current version1.1</h3>
+    <h3 class="main-heading3">current version1.1</h3>
+    <p>utilizing sync-for-simulated you can sync your stats from simcompanies.com to google sheet, producing better analysis of your company.</p>
+
+    <div class="div01">
+        <h4>procedure</h4>
+        <li>create a google sheet and google drive folder, and share them with <strong class="need_mono">datasyncer@syncforsimulated.iam.gserviceaccount.com</strong>
+        <button onclick="copyTextClipboard('datasyncer@syncforsimulated.iam.gserviceaccount.com')">
+            copy
+        </button>.
+        </li>
+        <li>fill google <a href="https://docs.google.com/forms/d/e/1FAIpQLSeUNfMROse0WDaLtaeP7lCSUo6322QNBcMOsglT6kWlnpgWnQ/viewform?usp=sf_link">form</a>.</li>
+        <li>upload your CSV files in a shared google drive folder, and your data will be updated within 4 hours in your google sheet (I know it's a long time but we don't have any server).</li>
+    </div>
+
+    <div>
+        <h4>data-we-collect</h4>
+        <li style="color: #ff8888">we don't store any of your data from drive or sheet.</li>
+        <li>only data we store is one you fill in initial form, so we know where to look for CSVs and where to update sheet.</li>
+        <li>if you are still unsatisfied, all the data we have in open for everyone to see <a href="https://drive.google.com/drive/folders/1r8_0_JwiBZ7V_pCSSr08nhrPLHzFl-Ir?usp=sharing">here</a>.</li>
+        <li>in short we know following about you<br>
+            &emsp;&emsp; google sheet id (so we know which sheet to update)<br>
+            &emsp;&emsp; google drive folder id (so we know where to search for CSV files)<br>
+            &emsp;&emsp; company name (in case we need a contact with you)<br>
+            &emsp; all data we have can't be used to get data from your drive or sheets (not even I can access)
+        </li>
+        
+    </div>
+
+    <div>
+        <h4>changelog</h4>
+        <li>fixed issue of recreating google sheet everytime</li>
+        <li>now you don't need to submit google form everytime you need to sync</li>
+    </div>
 </body>
 <footer>
-    <a href="https://github.com/JymPatel/syncforsimulated">project available on ❤️ github</a>
+    <div>
+        <h4>credits</h4>
+        <p>me @JymPatel to create nicely working program and not so good looking website (as I am not much on website side "frontend")</p>
+    </div>
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jympatel" data-description="Support me on Buy me a coffee!" data-message="" data-color="#63E6AC" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+    <p>if you find any vulnerability in code, please contact me at <strong class="need_mono">jympatel@yahoo.com</strong> or <a href="https://www.simcompanies.com/company/0/SIMULATED%20COMPANY/" class="need_mono">SIMULATED COMPANY</a> in simcompanies.com or create issue in github below</p>
+    <a class="github_link" href="https://github.com/JymPatel/syncforsimulated">project available on ❤️ github</a>
 </footer>
 </html>
