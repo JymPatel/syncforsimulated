@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Quicksand:wght@300;400;500;600;700&family=Rubik+Dirt&display=swap');
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
 @import url('https://fonts.googleapis.com/css2?family=Aboreto&family=Quicksand:wght@300;400;500&family=Roboto+Flex:opsz,wght@8..144,100;8..144,200;8..144,300;8..144,400;8..144,500;8..144,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100;8..144,200;8..144,300;8..144,400;8..144,500;8..144,600&family=Roboto+Mono:ital,wght@0,100;0,300;0,400;1,100;1,300&family=Satisfy&display=swap');
 
 
 h1 {
@@ -8,19 +9,13 @@ h1 {
 }
 
 .main-heading {
-    font-family: 'Aboreto', 'Cedarville Cursive', cursive;
-    font-size: 40px;
-    font-weight: bold;
+    font-family: 'Satisfy', cursive;
+    font-weight: 200;
+    font-size: 300%;
 }
 
+
 body {
-    font-family: 'Roboto Flex';
-    margin: 3%;
-    font-weight: normal;
-}
-a {
-    font-family:'Courier New', Courier, monospace;
-    font-size: 100%;
-    font-weight: bold;
-    text-decoration: none;
+    padding: 3%;
+    padding-top: 1%;
 }
