@@ -12,10 +12,22 @@ h1 {
     font-family: 'Satisfy', cursive;
     font-weight: 200;
     font-size: 300%;
+    margin-bottom: 0%;
+}
+.main-heading3 {
+    font-family: 'Satisfy', cursive;
+    font-weight: 200;
+    font-size: 150%;
+    padding-left: 10%;
+    margin-top: 0%;
 }
 
 
 body {
     padding: 3%;
     padding-top: 1%;
+}
+
+.github_link {
+    font-family: 'Roboto Mono';
 }
