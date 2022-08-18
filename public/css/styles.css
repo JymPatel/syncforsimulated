@@ -5,7 +5,7 @@
 
 
 h1 {
-    color: #000000;
+    color: #3C5248;
 }
 
 .main-heading {
@@ -26,15 +26,41 @@ h1 {
 
 
 body {
+    font-family: "Roboto Flex";
     padding: 3%;
     padding-top: 1%;
 }
 
 .github_link {
-    font-family: 'Roboto Mono';
+    font-family: "Satisfy", 'Roboto Mono';
     text-decoration: none;
-    color: #63E6AC;
+    color: #3C5248;
+    font-size: 180%;
 }
 .github_link:hover {
     color: #449E76;
+}
+
+h4 {
+    color: #3C5248;
+    font-family: 'Satisfy';
+    font-size: 150%;
+    margin-bottom: 0%;
+}
+
+li {
+    margin: 0.7%;
+}
+
+.need_mono {
+    font-family: "Roboto Mono";
+    font-size: small;
+}
+
+a {
+    color: #63E6AC;
+    text-decoration: none;
+}
+a:hover {
+    color: #3C5248;
 }
