@@ -13,6 +13,7 @@ h1 {
     font-weight: 200;
     font-size: 300%;
     margin-bottom: 0%;
+    color: #449E76;
 }
 .main-heading3 {
     font-family: 'Satisfy', cursive;
@@ -20,6 +21,7 @@ h1 {
     font-size: 150%;
     padding-left: 10%;
     margin-top: 0%;
+    color: #3C5248;
 }
 
 
@@ -30,4 +32,9 @@ body {
 
 .github_link {
     font-family: 'Roboto Mono';
+    text-decoration: none;
+    color: #63E6AC;
+}
+.github_link:hover {
+    color: #449E76;
 }
