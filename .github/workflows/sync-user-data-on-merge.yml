@@ -1,10 +1,8 @@
 name: sync user data on merge
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  schedule:
+    - cron: "* */3 * * *"
 
 jobs:
   sync_data:
