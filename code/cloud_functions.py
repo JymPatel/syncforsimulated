@@ -114,7 +114,6 @@ def update_data(jsonfile, input_file, sheet_id, synced_transactions):
                 insertRow.append(row[-1].split('", "')[4].split('profit": "$')[-1].split('"')[0])
                 worksheet.append_row(insertRow, 2)
                 time.sleep(1)
-    worksheet.sort(1, 'asc') # sorts worksheet at last
     return synced_transactions
 
 
