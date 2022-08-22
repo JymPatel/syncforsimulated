@@ -1,80 +1,76 @@
-from curses import keyname
+from enum import auto
 import sys
 import csv
 import json
 import cloud_functions as cf
 
+# TODO remove it if no need at end
+# # tmp variables 
+# ignored_files = ['transactions.json', 'synced_data.json']
 
-# tmp variables 
-usedfiles = []
 # global variables
 keyname_json = sys.argv[1]
-data_folder = '1r8_0_JwiBZ7V_pCSSr08nhrPLHzFl-Ir'
+data_folder_id = '1r8_0_JwiBZ7V_pCSSr08nhrPLHzFl-Ir'
+synced_data_id = '10M77XlvS4F6hVhxpSTX-ajNn1XqbWefJ'
+automations_file_id = '10UW3wdS6myrvCxmO8B_4GyuyKEUJxYeS'
 
 
 def main():
-    print('\nfinding useful files ...')
-    folders = cf.search_file(keyname_json, query=f'mimeType = "application/vnd.google-apps.folder"')
-    internal_files = cf.search_file(keyname_json, query=f"'{data_folder}' in parents")
+    # load data
+    automations = load_data(automations_file_id)
+    synced_data = load_data(synced_data_id)
 
-    for folder in folders:
-        print(f'\nworking on {folder["name"]} with id {folder["id"]} ...')
-        print('finding settings file ...')
+    synced_transactions = synced_data["transactions"]
+    synced_files = synced_data["files"]
 
-        for file in internal_files:
-            if str(folder['id']) in file['name']:
-                print('found!!')
-                with open('tmpfile', 'wb') as f:
-                    f.write(cf.download_file(keyname_json, real_file_id=file['id']))
-                    f.close()
-                with open('tmpfile') as f:
-                    settings = json.load(f)
-                print('collected automation settings!!')
+
+    for automation_no in automations.keys():
+        print(f'working on automation {automation_no}')
+
+
+        for x in ["transactions", "files"]:
+            if automation_no not in synced_data[x].keys():
+                synced_data[x][automation_no] = []
         
-            
-        print('getting all your csv files ...')
-        files = cf.search_file(keyname_json, query=f"'{folder['id']}' in parents")
+        automation = automations[automation_no]
+        if automation['status'] != 'active':
+            continue
 
-        transactions_file_id = None
-        for file in files:
-            if file['name'] == 'transactions.json':
-                with open('tmpfile', 'wb') as f:
-                    f.write(cf.download_file(keyname_json, real_file_id=file['id']))
-                    f.close()
-                with open('tmpfile') as f:
-                    transactions = json.load(f)
-                print('collected automation settings!!')
-                transactions_file_id = file['id']
-                break
-        else:
-            transactions = {
-                'synced': []
-            }
-
+        files = cf.search_file(keyname_json, query="'"+ automation['data_folder_id'] + "' in parents and mimeType='text/csv'")
 
         for file in files:
-            if '.csv' not in file['name']:
+            if file['id'] in synced_data['files'][automation_no]:
                 continue
-            if file['id'] in usedfiles:
-                continue
-            usedfiles.append(file['id'])
+            print(f"working on file {file['id']}")
+            # code here
 
-            tmpfile = cf.download_file(keyname_json, file['id'])
-            with open('tmpfile', 'wb') as f:
-                f.write(tmpfile)
-            print(file)
-            with open('tmpfile', 'r') as f:
-                tmpfile = csv.reader(f)
-            transactions['synced'] = cf.update_data(keyname_json, 'tmpfile', settings['sheet_id'], transactions['synced'])
+            synced_data['files'][automation_no].append(file['id'])
 
-        # update transactions file
-        if transactions_file_id:
-            cf.delete_file(keyname_json, transactions_file_id)
-        with open('tmpfile', 'w') as f:
-            json.dump(transactions, f)
-            f.close()
+        print('done!!')
 
-        cf.upload_basic(keyname_json, 'transactions.json', [folder['id']], 'application/json', 'tmpfile')
+
+    # save data
+    save_data(synced_data, synced_data_id)
+
+
+def load_data(file_id):
+    # get automations
+    # TODO create algo efficient to directlty convert binary_file to dict using json.load()
+    binary_file = cf.download_file(keyname_json, file_id)
+    with open('tmpfile', 'wb') as f:
+        f.write(binary_file)
+        f.close()
+    with open('tmpfile') as f:
+        dict = json.load(f)
+        f.close()
+    
+    return dict
+
+def save_data(dict, file_id):
+    with open('tmpfile', 'w') as f:
+        json.dump(dict, f)
+        f.close()
+    cf.update_file(keyname_json, 'tmpfile', file_id)
 
 if __name__ == "__main__":
     main()
