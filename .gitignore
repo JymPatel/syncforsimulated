@@ -73,5 +73,6 @@ code/__pycache__/*
 code/tmpfile
 *.pyc
 code/__pycache__/cloud_functions.cpython-38.pyc
-code/__pycache__/cloud_functions.cpython-38.pyc
 code/tmpfile
+.vscode/settings.json
+*.json

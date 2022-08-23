@@ -18,8 +18,19 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+        
+      - name: setup enviroment
+        run: |
+          source /.venv/bin/activate
+      
+      - name: create JSON file
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "creds.json"
+          json: ${{ secrets.SERVICE_ACCOUNT_JSON_FILE }}
       
       - name: testing updating file
         run: |
-          python3 code/test.py
+          python3 main.py creds.json
 
