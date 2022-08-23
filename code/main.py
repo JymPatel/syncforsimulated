@@ -10,6 +10,7 @@ import cloud_functions as cf
 
 # global variables
 keyname_json = sys.argv[1]
+run_type = sys.argv[2]
 data_folder_id = '1r8_0_JwiBZ7V_pCSSr08nhrPLHzFl-Ir'
 synced_data_id = '10M77XlvS4F6hVhxpSTX-ajNn1XqbWefJ'
 automations_file_id = '10UW3wdS6myrvCxmO8B_4GyuyKEUJxYeS'
@@ -33,13 +34,15 @@ def main():
                 synced_data[x][automation_no] = []
         
         automation = automations[automation_no]
-        if automation['status'] != 'active':
+        if automation['status'] != run_type:
             continue
-
-        files = cf.search_file(keyname_json, query="'"+ automation['data_folder_id'] + "' in parents and mimeType='text/csv'")
+        
+        query="'"+ automation['data_folder_id'] + "' in parents and mimeType='text/csv'"
+        files = cf.search_file(keyname_json, query=query)
 
         for file in files:
-            if file['id'] in synced_data['files'][automation_no]:
+            if file['id'] in synced_files[automation_no]:
+                print(f"skipping file with filename {file['name']} and fileId {file['id']} as is already synced")
                 continue
             print(f"working on file {file['id']}")
             # code here

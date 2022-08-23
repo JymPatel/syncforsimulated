@@ -1,4 +1,4 @@
-name: workflow v1.2
+name: workflow v2.0
 
 on:
   push:
@@ -18,12 +18,8 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-        
-      - name: setup enviroment
-        run: |
-          source /.venv/bin/activate
       
-      - name: create JSON file
+      - name: creating JSON file from GitHub Secrets
         id: create-json
         uses: jsdaniell/create-json@1.1.2
         with:
@@ -32,5 +28,5 @@ jobs:
       
       - name: testing updating file
         run: |
-          python3 main.py creds.json
+          python3 main.py creds.json testing
 
