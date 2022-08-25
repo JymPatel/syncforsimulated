@@ -1,4 +1,3 @@
-from enum import auto
 import sys
 import csv
 import json
@@ -45,7 +44,30 @@ def main():
                 print(f"skipping file with filename {file['name']} and fileId {file['id']} as is already synced")
                 continue
             print(f"working on file {file['id']}")
-            # code here
+            
+            # get file
+            file_list = load_data(file['id'], type='csv')
+            if 'id' in file_list[0]:
+                csv_type = 'cash recipts'
+            elif 'NetIncome' in file_list[0]:
+                csv_type = 'income statement'
+            
+            
+            new_sheet_data = []
+
+            if csv_type == 'cash recipts':
+                for row in file_list:
+                    if automation['sync_data']['restaurant'] == []:
+                        break
+                    newRow = []
+                    for item in automation['sync_data']['restaurant']:
+                        newRow.append(get_restaurant(row, item))
+                    new_sheet_data.append(newRow)
+            elif csv_type == 'income statement':
+                pass #TODO
+            
+            # update sheet
+            update_sheet(automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
 
             synced_data['files'][automation_no].append(file['id'])
 
@@ -53,19 +75,44 @@ def main():
 
 
     # save data
-    save_data(synced_data, synced_data_id)
+    save_data({"transactions": synced_transactions, "files": synced_files}, synced_data_id)
 
 
-def load_data(file_id):
+def update_sheet(file_id, worksheet_name, array):
+    for row in array:
+        pass
+
+def get_restaurant(row, item):
+    if item == 'id':
+        return row[0]
+    if item == 'timestamp':
+        return row[1]
+    if item == 'category':
+        return row[2]
+    if item == 'revenue':
+        return row[3]
+    if item == 'description':
+        return row[4]
+
+
+def load_data(file_id, type='json'):
     # get automations
     # TODO create algo efficient to directlty convert binary_file to dict using json.load()
     binary_file = cf.download_file(keyname_json, file_id)
     with open('tmpfile', 'wb') as f:
         f.write(binary_file)
         f.close()
-    with open('tmpfile') as f:
-        dict = json.load(f)
-        f.close()
+    with open('tmpfile', 'r') as f:
+        if type == 'json':
+            dict = json.load(f)
+            f.close()
+            return dict
+        if type == 'csv':
+            dict = csv.reader(f)
+            list = [row for row in dict]
+            f.close()
+            return list
+
     
     return dict
 
