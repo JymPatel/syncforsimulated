@@ -67,7 +67,7 @@ def main():
                 pass #TODO
             
             # update sheet
-            update_sheet(automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
+            cf.update_sheet(keyname_json, automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
 
             synced_data['files'][automation_no].append(file['id'])
 

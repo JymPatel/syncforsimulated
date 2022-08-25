@@ -162,6 +162,23 @@ def update_file(jsonfile, file_name, file_id):
 
     return file.get('id')
 
+def update_sheet(jsonfile, sheet_id, worksheet_name, rows):
+    # authentication
+    print('authenticating ...')
+    scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
+        "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+    creds = Credentials.from_service_account_file(jsonfile, scopes=scope)
+    client = gspread.authorize(creds)
+    
+    # open google sheet
+    sheet = client.open_by_key(sheet_id)
+    try:
+        worksheet = sheet.worksheet(worksheet_name)
+    except gspread.exceptions.WorksheetNotFound:
+        sheet.add_worksheet(worksheet_name, 1, 26)
+        worksheet = sheet.worksheet(worksheet_name)
+    worksheet.append_rows(rows)
+
 
 def upload_basic(jsonfile, name, parent_id, mime_type, file_name):
 
