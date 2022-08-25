@@ -2,7 +2,10 @@ name: sync user data on merge
 
 on:
   schedule:
-    - cron: "* */3 * * *"
+    - cron: "*/60 */3 * * *"
+  push:
+    branches:
+      - master
 
 jobs:
   sync_data:
