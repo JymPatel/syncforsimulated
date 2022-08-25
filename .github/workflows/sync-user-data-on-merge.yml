@@ -34,4 +34,4 @@ jobs:
       
       - name: run main program
         run: |
-          python3 code/trash/main_v1.1.py creds.json creds.json
+          python3 code/trash/main_v1_1.py creds.json creds.json
