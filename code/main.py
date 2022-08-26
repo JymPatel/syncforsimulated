@@ -23,54 +23,71 @@ def main():
     synced_transactions = synced_data["transactions"]
     synced_files = synced_data["files"]
 
-
+    # start automations
     for automation_no in automations.keys():
         print(f'working on automation {automation_no}')
 
-
+        # check for synced data
         for x in ["transactions", "files"]:
             if automation_no not in synced_data[x].keys():
                 synced_data[x][automation_no] = []
         
+        # get automation
         automation = automations[automation_no]
-        if automation['status'] != run_type:
+        if automation['status'] not in run_type:
             continue
         
+        # remove all synced data if automation is of 'testing'
+        if automation['status'] == 'testing':
+            synced_transactions[automation_no] = []
+            synced_files[automation_no] = []
+
+        # search for csv files
         query="'"+ automation['data_folder_id'] + "' in parents and mimeType='text/csv'"
         files = cf.search_file(keyname_json, query=query)
 
+
+            
+        # create new sheet data
+        new_sheet_data = []
+
+        # sync data for every csv file
         for file in files:
+
             if file['id'] in synced_files[automation_no]:
                 print(f"skipping file with filename {file['name']} and fileId {file['id']} as is already synced")
                 continue
             print(f"working on file {file['id']}")
             
-            # get file
+            # download file
             file_list = load_data(file['id'], type='csv')
             if 'id' in file_list[0]:
                 csv_type = 'cash recipts'
             elif 'NetIncome' in file_list[0]:
                 csv_type = 'income statement'
-            
-            
-            new_sheet_data = []
 
+            # cash receipt csv file
             if csv_type == 'cash recipts':
+                # restaurant
                 for row in file_list:
                     if automation['sync_data']['restaurant'] == []:
                         break
+                    if ( 'restaurant revenue' != row[4].lower() ) or ( row[0] in synced_transactions[automation_no] ):
+                        continue
                     newRow = []
                     for item in automation['sync_data']['restaurant']:
-                        newRow.append(get_restaurant(row, item))
+                        newRow.append(get_restaurant(row, item.lower()))
                     new_sheet_data.append(newRow)
+                    synced_transactions[automation_no].append(row[0])
             elif csv_type == 'income statement':
                 pass #TODO
             
-            # update sheet
-            cf.update_sheet(keyname_json, automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
+    
 
-            synced_data['files'][automation_no].append(file['id'])
-
+            synced_files[automation_no].append(file['id'])
+        
+        # update sheet
+        cf.update_sheet(keyname_json, automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
         print('done!!')
 
 
@@ -78,19 +95,35 @@ def main():
     save_data({"transactions": synced_transactions, "files": synced_files}, synced_data_id)
 
 
-def update_sheet(file_id, worksheet_name, array):
-    for row in array:
-        pass
 
 def get_restaurant(row, item):
     if item == 'id':
         return row[0]
+    # covert to date and time
+    if item == 'date':
+        return row[1].split('T')[0]
+    if item == 'time':
+        return row[1].split('T')[1].split('.')[0]
+    # whole timestamp
     if item == 'timestamp':
         return row[1]
-    if item == 'category':
-        return row[2]
+    # useful restaurant data
+    details = json.loads(row[5])
     if item == 'revenue':
         return row[3]
+    if item == 'cogs':
+        return details['COGS']
+    if item == 'profit':
+        return details['profit']
+    if item == 'occupancy':
+        return details['occupancy']
+    if item == 'wages':
+        return details['wages']
+    if item == 'rating':
+        return details['rating']
+    # extras
+    if item == 'category':
+        return row[2]
     if item == 'description':
         return row[4]
 
