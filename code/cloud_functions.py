@@ -177,7 +177,7 @@ def update_sheet(jsonfile, sheet_id, worksheet_name, rows):
     except gspread.exceptions.WorksheetNotFound:
         sheet.add_worksheet(worksheet_name, 1, 26)
         worksheet = sheet.worksheet(worksheet_name)
-    worksheet.append_rows(rows)
+    worksheet.append_rows(rows, 'USER_ENTERED')
 
 
 def upload_basic(jsonfile, name, parent_id, mime_type, file_name):
