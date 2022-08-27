@@ -1,5 +1,9 @@
 gspread
-    pip install gspread
+# gspread is tool that we use to update data in google sheet
+# use `pip install gspread`
 
-google api client for python
-    pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+# google official libraries for drive, auth
+# use `pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib`

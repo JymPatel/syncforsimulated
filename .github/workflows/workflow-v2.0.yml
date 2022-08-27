@@ -32,6 +32,7 @@ jobs:
         run: |
           pip install gspread
           pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
       - name: updating file
         run: |
           python3 code/main.py creds.json active
