@@ -28,11 +28,11 @@ jobs:
           name: "creds.json"
           json: ${{ secrets.SERVICE_ACCOUNT_JSON_FILE }}
       
-      # - name: installing required libraries
-      #   run: |
-      #     pip install gspread
-      #     pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-      
+      - name: installing required libraries
+        run: |
+          pip install gspread
+          pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
       - name: updating file
         run: |
           python3 code/main.py creds.json active
