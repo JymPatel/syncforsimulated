@@ -7,10 +7,12 @@ on:
     branches: [" master "]
 
 jobs:
-  steps:
-  - uses: actions/checkout@v3
-  - uses: actions/setup-python@v4
-    with:
-      python-version: '3.9'
-      cache: 'pip' # caching pip dependencies
-  - run: pip install -r code/docs/requirements.txt
+  installing-pip-lib:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r code/docs/requirements.txt
