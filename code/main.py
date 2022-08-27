@@ -3,9 +3,6 @@ import csv
 import json
 import cloud_functions as cf
 
-# TODO remove it if no need at end
-# # tmp variables 
-# ignored_files = ['transactions.json', 'synced_data.json']
 
 # global variables
 keyname_json = sys.argv[1]
@@ -61,10 +58,12 @@ def main():
             
             # download file
             file_list = load_data(file['id'], type='csv')
-            if 'id' in file_list[0]:
+            if 'id' in file_list[0].keys():
                 csv_type = 'cash recipts'
-            elif 'NetIncome' in file_list[0]:
+            elif 'NetIncome' in file_list[0].keys():
                 csv_type = 'income statement'
+            elif 'Retained Earnings' in file_list[0].keys():
+                csv_type = 'balance sheet'
 
             # cash receipt csv file
             if csv_type == 'cash recipts':
@@ -72,15 +71,30 @@ def main():
                 for row in file_list:
                     if automation['sync_data']['restaurant'] == []:
                         break
-                    if ( 'restaurant revenue' != row[4].lower() ) or ( row[0] in synced_transactions[automation_no] ):
+                    if ( 'restaurant revenue' != row['Description'].lower() ) or ( row['id'] in synced_transactions[automation_no] ):
                         continue
                     newRow = []
                     for item in automation['sync_data']['restaurant']:
                         newRow.append(get_restaurant(row, item.lower()))
                     new_sheet_data.append(newRow)
-                    synced_transactions[automation_no].append(row[0])
+                    synced_transactions[automation_no].append(row['id'])
+            
+            # income statement csv file
             elif csv_type == 'income statement':
-                pass #TODO
+                pass
+
+            # balance sheet csv file
+            elif csv_type == 'balance sheet':
+                for row in file_list:
+                    if automation['sync_data']['balance_sheet'] == []:
+                        break
+                    if row['Timestamp'] in synced_transactions[automation_no]:
+                        continue
+                    newRow = []
+                    for item in automation['sync_data']['balance_sheet']:
+                        newRow.append(get_balance(row, item.lower()))
+                    new_sheet_data.append(newRow)
+                    synced_transactions[automation_no].append(row['Timestamp'])
             
     
 
@@ -98,19 +112,19 @@ def main():
 
 def get_restaurant(row, item):
     if item == 'id':
-        return row[0]
+        return row['id']
     # covert to date and time
     if item == 'date':
-        return row[1].split('T')[0]
+        return row['Timestamp'].split('T')[0]
     if item == 'time':
-        return row[1].split('T')[1].split('.')[0]
+        return row['Timestamp'].split('T')[1].split('.')[0]
     # whole timestamp
     if item == 'timestamp':
-        return row[1]
+        return row['Timestamp']
     # useful restaurant data
-    details = json.loads(row[5])
+    details = json.loads(row['Details'])
     if item == 'revenue':
-        return row[3]
+        return row['Money']
     if item == 'cogs':
         return details['COGS']
     if item == 'profit':
@@ -123,9 +137,17 @@ def get_restaurant(row, item):
         return details['rating']
     # extras
     if item == 'category':
-        return row[2]
+        return row['Category']
     if item == 'description':
-        return row[4]
+        return row['Description']
+    if item.split(' ')[0] == '':
+        return '-'
+
+def get_balance(row, item):
+    if item == 'date':
+        return row['Timestamp'].split('T')[0]
+    if item == 'company_value':
+        return int(row['Contributed Capital']) + int(row['Retained Earnings'])
 
 
 def load_data(file_id, type='json'):
@@ -141,10 +163,10 @@ def load_data(file_id, type='json'):
             f.close()
             return dict
         if type == 'csv':
-            dict = csv.reader(f)
-            list = [row for row in dict]
+            list = csv.DictReader(f)
+            new_list = [row for row in list]
             f.close()
-            return list
+            return new_list
 
     
     return dict

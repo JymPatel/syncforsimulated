@@ -28,7 +28,7 @@ jobs:
           name: "creds.json"
           json: ${{ secrets.SERVICE_ACCOUNT_JSON_FILE }}
 
-      - name: main workflow
+      - name: main workflow 
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'

@@ -1,3 +1,5 @@
+#  pip libraries required ...
+
 gspread
 # gspread is tool that we use to update data in google sheet
 # use `pip install gspread`
