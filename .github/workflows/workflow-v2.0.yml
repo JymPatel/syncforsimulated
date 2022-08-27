@@ -14,14 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
-
-      - name: cache pip
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
-      - run: pip install -r code/docs/requirements.txt
+        uses: actions/checkout@v
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -40,7 +33,13 @@ jobs:
       #     pip install gspread
       #     pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
-      - name: updating file
-        run: |
+
+      - name: cache pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: |
+          pip install -r code/docs/requirements.txt
           python3 code/main.py creds.json active
 
