@@ -3,7 +3,6 @@ import io
 import csv
 import gspread
 import time
-from datetime import datetime
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
@@ -68,60 +67,6 @@ def download_file(jsonfile, real_file_id):
     return file.getvalue()
 
 
-def update_data(jsonfile, input_file, sheet_id, synced_transactions, building):
-
-    # authentication
-    print('authenticating ...')
-    scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
-        "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-    creds = Credentials.from_service_account_file(jsonfile, scopes=scope)
-    client = gspread.authorize(creds)
-
-    # open sheet
-    print('opening google sheet ...')
-    sheet = client.open_by_key(sheet_id)
-    try:
-        worksheet = sheet.worksheet('synced_data')
-
-    except gspread.exceptions.WorksheetNotFound:
-        print('creating new worksheet ...')
-        worksheet = sheet.add_worksheet('synced_data', 2, 10)
-        issueMessage = 'if you have any issues please contact me jympatel@yahoo.com OR "SIMULATED COMPANY" in simcompanies.com'
-        worksheet.append_row(['id', 'date', 'time', 'revenue', 'COGS', 'wages', 'occupancy', 'rating', 'profit', issueMessage], 2)
-
-    # get data
-    print('adding data')
-    csv_file = input_file
-    with open(csv_file, 'r') as file:
-        list = csv.reader(file)
-        if building == 'restaurant':
-            for row in list: 
-                if row[0] in synced_transactions:
-                    continue
-                synced_transactions.append(row[0])
-                insertRow = []
-                if 'restaurant revenue' in row[4].lower():
-                    insertRow.append(row[0])
-                    insertRow.append(row[1].split('T')[0])
-                    insertRow.append(row[1].split('T')[1].split('.')[0])
-                    insertRow.append(row[3])
-                    insertRow.append(row[-1].split('", "')[0].split('{"COGS": "$')[-1])
-                    insertRow.append(row[-1].split('", "')[1].split('wages": "$')[-1])
-                    insertRow.append(
-                        row[-1].split('", "')[2].split('occupancy": "')[-1].split('%')[0])
-                    insertRow.append(row[-1].split('", "')[3].split('rating": "')[-1])
-                    insertRow.append(row[-1].split('", "')[4].split('profit": "$')[-1].split('"')[0])
-                    worksheet.append_row(insertRow, 2)
-                    time.sleep(1)
-        if building == 'sales_office':
-            for row in list:
-                if row[0] in synced_transactions:
-                    continue
-                insertRow = []
-
-    return synced_transactions
-
-
 def delete_file(jsonfile, file_id):
 
     scopes = ['https://www.googleapis.com/auth/spreadsheets',
@@ -161,6 +106,7 @@ def update_file(jsonfile, file_name, file_id):
         file = None
 
     return file.get('id')
+
 
 def update_sheet(jsonfile, sheet_id, worksheet_name, rows):
     # authentication
