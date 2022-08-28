@@ -8,7 +8,7 @@ visit web at [syncforsimulated.web.app](https://syncforsimulated.web.app)
 #### version 2
 * (biGgest changes in program)  
 * most efficient algorithm till now  
-* automatic sync every 10 minutes  
+* automatic sync every 30 minutes  
 * choose your worksheet name  
 * sync data you want, and in order you want  
 * create sheet with company values  
