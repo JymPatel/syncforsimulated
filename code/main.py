@@ -7,37 +7,47 @@ import cloud_functions as cf
 # global variables
 keyname_json = sys.argv[1]
 run_type = sys.argv[2]
-data_folder_id = '1r8_0_JwiBZ7V_pCSSr08nhrPLHzFl-Ir'
-synced_data_id = '10M77XlvS4F6hVhxpSTX-ajNn1XqbWefJ'
+# data_folder_id = '1r8_0_JwiBZ7V_pCSSr08nhrPLHzFl-Ir'
+# synced_data_id = '10M77XlvS4F6hVhxpSTX-ajNn1XqbWefJ'
+synced_datav3_id = '1YbS4W5470tBt26xy81O0DDOvHBx0jwzN'
 automations_file_id = '10UW3wdS6myrvCxmO8B_4GyuyKEUJxYeS'
 
 
 def main():
     # load data
     automations = load_data(automations_file_id)
-    synced_data = load_data(synced_data_id)
+    # synced_data = load_data(synced_data_id)
+    synced_datav3 = load_data(synced_datav3_id)
 
-    synced_transactions = synced_data["transactions"]
-    synced_files = synced_data["files"]
+    # synced_transactions = synced_data["transactions"]
+    # synced_files = synced_data["files"]
 
     # start automations
     for automation_no in automations.keys():
         print(f'working on automation {automation_no}')
 
-        # check for synced data
-        for x in ["transactions", "files"]:
-            if automation_no not in synced_data[x].keys():
-                synced_data[x][automation_no] = []
+        # # check for synced data
+        # for x in ["transactions", "files"]:
+        #     if automation_no not in synced_data[x].keys():
+        #         synced_data[x][automation_no] = []
+        
+        # v3 check for synced data
+        if automation_no not in synced_datav3.keys():
+            synced_datav3[automation_no] = {"transactions": [], "files": [], "timestamps": []}
         
         # get automation
         automation = automations[automation_no]
         if automation['status'] not in run_type:
+            print('    skipped automation!')
             continue
         
-        # remove all synced data if automation is of 'testing'
+        # # remove all synced data if automation is of 'testing'
+        # if automation['status'] == 'testing':
+        #     synced_transactions[automation_no] = []
+        #     synced_files[automation_no] = []
+        # for v3 data
         if automation['status'] == 'testing':
-            synced_transactions[automation_no] = []
-            synced_files[automation_no] = []
+            synced_datav3[automation_no] = {"transactions": [], "files": [], "timestamps": []}
 
         # search for csv files
         print('    searching files')
@@ -53,7 +63,7 @@ def main():
         print('    syncing files')
         for file in files:
 
-            if file['id'] in synced_files[automation_no]:
+            if file['id'] in synced_datav3[automation_no]['files']:
                 print(f"        skipped file: {file['name']}, {file['id']}")
                 continue
             
@@ -72,13 +82,13 @@ def main():
                 for row in file_list:
                     if automation['sync_data']['restaurant'] == []:
                         break
-                    if ( 'restaurant revenue' != row['Description'].lower() ) or ( row['id'] in synced_transactions[automation_no] ):
+                    if ( 'restaurant revenue' != row['Description'].lower() ) or ( row['id'] in synced_datav3[automation_no]['transactions'] ):
                         continue
                     newRow = []
                     for item in automation['sync_data']['restaurant']:
                         newRow.append(get_restaurant(row, item.lower()))
                     new_sheet_data.append(newRow)
-                    synced_transactions[automation_no].append(row['id'])
+                    synced_datav3[automation_no]['transactions'].append(row['id'])
             
             # income statement csv file
             elif csv_type == 'income statement':
@@ -89,25 +99,29 @@ def main():
                 for row in file_list:
                     if automation['sync_data']['balance_sheet'] == []:
                         break
-                    if row['Timestamp'] in synced_transactions[automation_no]:
+                    if row['Timestamp'] in synced_datav3[automation_no]['timestamps']:
                         continue
                     newRow = []
                     for item in automation['sync_data']['balance_sheet']:
                         newRow.append(get_balance(row, item.lower()))
                     new_sheet_data.append(newRow)
-                    synced_transactions[automation_no].append(row['Timestamp'])
+                    synced_datav3[automation_no]['timestamps'].append(row['Timestamp'])
             
     
             print(f'        synced file: {file["name"]}, {file["id"]}')
-            synced_files[automation_no].append(file['id'])
+            synced_datav3[automation_no]['files'].append(file['id'])
         
         # update sheet
-        cf.update_sheet(keyname_json, automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
+        if new_sheet_data != []:
+            cf.update_sheet(keyname_json, automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
+        else:
+            print('    skipped updating sheet: no new data to update')
         print('    done!!')
 
 
     # save data
-    save_data({"transactions": synced_transactions, "files": synced_files}, synced_data_id)
+    # save_data({"transactions": synced_transactions, "files": synced_files}, synced_data_id)
+    save_data(synced_datav3, synced_datav3_id)
 
 
 
