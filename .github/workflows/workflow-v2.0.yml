@@ -27,12 +27,6 @@ jobs:
         with:
           name: "creds.json"
           json: ${{ secrets.SERVICE_ACCOUNT_JSON_FILE }}
-
-      - name: cache pip libraries
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
       - name: download pip libraries
         run: pip install -r code/docs/requirements.txt
       - name: main program
