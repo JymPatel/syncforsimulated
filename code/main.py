@@ -40,6 +40,7 @@ def main():
             synced_files[automation_no] = []
 
         # search for csv files
+        print('    searching files')
         query="'"+ automation['data_folder_id'] + "' in parents and mimeType='text/csv'"
         files = cf.search_file(keyname_json, query=query)
 
@@ -49,12 +50,12 @@ def main():
         new_sheet_data = []
 
         # sync data for every csv file
+        print('    syncing files')
         for file in files:
 
             if file['id'] in synced_files[automation_no]:
-                print(f"skipping file with filename {file['name']} and fileId {file['id']} as is already synced")
+                print(f"        skipped file: {file['name']}, {file['id']}")
                 continue
-            print(f"working on file {file['id']}")
             
             # download file
             file_list = load_data(file['id'], type='csv')
@@ -97,12 +98,12 @@ def main():
                     synced_transactions[automation_no].append(row['Timestamp'])
             
     
-
+            print(f'        synced file: {file["name"]}, {file["id"]}')
             synced_files[automation_no].append(file['id'])
         
         # update sheet
         cf.update_sheet(keyname_json, automation['sheet_id'], automation['worksheet_name'], new_sheet_data)
-        print('done!!')
+        print('    done!!')
 
 
     # save data

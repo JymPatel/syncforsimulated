@@ -109,14 +109,16 @@ def update_file(jsonfile, file_name, file_id):
 
 
 def update_sheet(jsonfile, sheet_id, worksheet_name, rows):
+    print(f'    updating sheet')
     # authentication
-    print('authenticating ...')
+    print('        authenticating')
     scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
     creds = Credentials.from_service_account_file(jsonfile, scopes=scope)
     client = gspread.authorize(creds)
     
     # open google sheet
+    print(f'        opening worksheet')
     sheet = client.open_by_key(sheet_id)
     try:
         worksheet = sheet.worksheet(worksheet_name)
@@ -124,6 +126,7 @@ def update_sheet(jsonfile, sheet_id, worksheet_name, rows):
         sheet.add_worksheet(worksheet_name, 1, 26)
         worksheet = sheet.worksheet(worksheet_name)
     worksheet.append_rows(rows, 'USER_ENTERED')
+    print(f'        updated sheet')
 
 
 def upload_basic(jsonfile, name, parent_id, mime_type, file_name):
